@@ -14,8 +14,8 @@ from trytond.transaction import Transaction
 
 ciclop = Blueprint('ciclop', __name__, template_folder='templates')
 
-REDIRECT_AFTER_LOGIN = current_app.config.get('REDIRECT_AFTER_LOGIN', 'index')
-REDIRECT_AFTER_LOGOUT = current_app.config.get('REDIRECT_AFTER_LOGOUT', 'index')
+REDIRECT_AFTER_LOGIN = current_app.config.get('REDIRECT_AFTER_LOGIN')
+REDIRECT_AFTER_LOGOUT = current_app.config.get('REDIRECT_AFTER_LOGOUT')
 LOGIN_EXTRA_FIELDS = current_app.config.get('LOGIN_EXTRA_FIELDS', [])
 
 User = tryton.pool.get('res.user')
@@ -65,7 +65,15 @@ def login(lang):
                 path_redirect = request.form['redirect']
                 if not path_redirect[:4] == 'http':
                     return redirect(path_redirect)
-            return redirect(url_for(REDIRECT_AFTER_LOGIN, lang=g.language))
+
+            if user.language and user.language.code in current_app.config.get('ACCEPT_LANGUAGES', []):
+                language = user.language.code[:2]
+            else:
+                language = g.language
+            if REDIRECT_AFTER_LOGIN:
+                return redirect(url_for(REDIRECT_AFTER_LOGIN, lang=language))
+            else:
+                return redirect(url_for(language))
         else:
             flash(_("Could not authenticate you."), 'danger')
 
@@ -95,7 +103,10 @@ def logout(lang):
         )
 
     flash(_('You are logged out.'))
-    return redirect(url_for(REDIRECT_AFTER_LOGOUT, lang=g.language))
+    if REDIRECT_AFTER_LOGOUT:
+        return redirect(url_for(REDIRECT_AFTER_LOGOUT, lang=g.language))
+    else:
+        return redirect(url_for(g.language))
 
 @ciclop.route('/profile', methods=["GET", "POST"], endpoint="profile")
 @login_required
