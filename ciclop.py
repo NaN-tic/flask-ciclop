@@ -3,7 +3,7 @@
 #the full copyright notices and license terms.
 from flask import Blueprint, request, render_template, current_app, session, \
     redirect, url_for, flash, g
-from flask.ext.babel import gettext as _, lazy_gettext as __
+from flask.ext.babel import gettext as _
 from flask.ext.wtf import Form
 from wtforms import TextField, PasswordField, validators
 from .tryton import tryton
