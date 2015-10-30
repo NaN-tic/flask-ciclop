@@ -54,7 +54,10 @@ def login(lang):
             session['name'] = user.name
             session['email'] = user.email
             for field in LOGIN_EXTRA_FIELDS: # add extra fields in session
-                 session[field] = getattr(user, field)
+                f = getattr(user, field)
+                if hasattr(f, 'id'): # can not save an object in session
+                    f = getattr(f, 'id') 
+                session[field] = f
 
             flash(_('You are logged in'))
             slogin.send(current_app._get_current_object(),
