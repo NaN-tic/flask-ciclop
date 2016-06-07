@@ -61,7 +61,7 @@ def login(lang):
 
             flash(_('You are logged in'))
             slogin.send(current_app._get_current_object(),
-                user=user['id'],
+                user=user.id,
                 session=session.sid,
                 )
             if request.form.get('redirect'):
