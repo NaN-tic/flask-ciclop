@@ -3,8 +3,8 @@
 #the full copyright notices and license terms.
 from flask import Blueprint, request, render_template, current_app, session, \
     redirect, url_for, flash, g
-from flask.ext.babel import gettext as _
-from flask.ext.wtf import Form
+from flask_babel import gettext as _
+from flask_wtf import Form
 from wtforms import TextField, PasswordField, validators
 from .tryton import tryton
 from .signals import login as slogin, failed_login as sfailed_login, logout as slogout
