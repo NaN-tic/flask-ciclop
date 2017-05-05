@@ -4,7 +4,7 @@
 from flask import Blueprint, request, render_template, current_app, session, \
     redirect, url_for, flash, g
 from flask_babel import gettext as _
-from flask_wtf import Form
+from flask_wtf import FlaskForm as Form
 from wtforms import TextField, PasswordField, validators
 from .tryton import tryton
 from .signals import login as slogin, failed_login as sfailed_login, logout as slogout
